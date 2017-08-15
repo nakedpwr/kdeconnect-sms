@@ -1,12 +1,15 @@
 #include "MainWindow.h"
 
+#include <QAction>
 #include <QBoxLayout>
 #include <QIntValidator>
 #include <QLineEdit>
+#include <QListWidgetItem>
 #include <QPushButton>
 #include <QTextEdit>
 
 #include "Application.h"
+#include "ContactWindow.h"
 #include "Helper.h"
 #include "SMS.h"
 
@@ -32,8 +35,6 @@ bool MainWindow::checkMessageInput() {
 bool MainWindow::checkNumberInput() {
     bool ok = true;
 
-    mNumberInput->text().toInt(&ok);
-
     return ok;
 }
 
@@ -43,6 +44,10 @@ QString MainWindow::getMessage() {
 
 QString MainWindow::getNumber() {
     return mNumberInput->text();
+}
+
+QLineEdit *MainWindow::getNumberInput() {
+    return mNumberInput;
 }
 
 QWidget *MainWindow::makeCentralWidget() {
@@ -77,9 +82,14 @@ QTextEdit *MainWindow::makeMessageInput() {
 
 QLineEdit *MainWindow::makeNumberInput() {
     if (mNumberInput == nullptr) {
+        QAction *selectContact = new QAction();
+        selectContact->setIcon(QIcon("Assets/Images/Contacts.png"));
+
         mNumberInput = new QLineEdit();
+        mNumberInput->addAction(selectContact, QLineEdit::ActionPosition::TrailingPosition);
 
         connect(App->getSMS(), &SMS::sent, mNumberInput, &QLineEdit::clear);
+        connect(selectContact, &QAction::triggered, App->getContactWindow(), &ContactWindow::show);
     }
 
     return mNumberInput;

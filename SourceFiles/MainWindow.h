@@ -5,6 +5,7 @@
 
 class QBoxLayout;
 class QLineEdit;
+class QListWidgetItem;
 class QPushButton;
 class QTextEdit;
 
@@ -17,6 +18,7 @@ public:
     bool checkNumberInput();
     QString getMessage();
     QString getNumber();
+    QLineEdit *getNumberInput();
 
 private:
     QWidget *makeCentralWidget();
